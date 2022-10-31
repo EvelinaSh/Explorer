@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Explorer</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Explorer.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="dist/themes/default/style.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href="dist/themes/proton/style.min.css" />
+</head>
+<body>
+    
+    <div class="container-fluid">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalLabel">Выберите файл для загрузки</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="form" name="form" action="/File/SaveFile" enctype="multipart/form-data" method="post">
+                    <div class="modal-body">
+                        <p>
+                            <label>Файл</label>
+                            <input id="files" name="files" type="file" size="1" multiple class="form-control" />
+                        </p>
+                        <p>
+                            <label>Описание файла</label>
+                            <input id="DescriptionFile" name="DescriptionFile" class="form-control" />
+                        </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveBtn">Загрузить файл</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+ 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/dist/jstree.min.js"></script>
+    <script src="dist/libs/jquery.js"></script>
+    <script src="dist/jstree.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+</body>
+</html>

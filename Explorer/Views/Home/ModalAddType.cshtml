@@ -1,0 +1,24 @@
+﻿<div id="ContentModalAddType" style="display:none">
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="modalLabel">Добавить расширение</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="form" name="form" action="/TypeFile/SaveType" enctype="multipart/form-data" method="post">
+    <div class="modal-body">
+        <p>
+            <label>Название расширения</label>
+            <input id="NameType" name="NameType" class="form-control" />
+        </p>
+
+        <p>
+            <label>Иконка</label>
+            <input id="icons" name="icons" type="file" size="1" multiple class="form-control" />
+        </p>
+
+    </div>
+</form>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addTypeBtn">Добавить расширение</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+</div>
+</div>

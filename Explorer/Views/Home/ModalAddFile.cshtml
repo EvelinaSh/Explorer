@@ -1,0 +1,27 @@
+﻿<div id="ContentModalAddFile" style="display:none">
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="modalLabel">Выберите файл для загрузки</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="form" name="form" action="/File/SaveFile" enctype="multipart/form-data" method="post">
+    <div class="modal-body">
+        <p>
+            <label>Файл</label>
+            <input id="files" name="files" type="file" size="1" multiple class="form-control" />
+        </p>
+        <p>
+            <label>Описание файла</label>
+            <input id="DescriptionFile" name="DescriptionFile" class="form-control" />
+        </p>
+            <div class="alert alert-warning" role="alert" id="alertAddFile">
+                Файл будет загружен в корневой каталог.
+                Для загрузки файла внутрь папки используйте контекстное меню дерева.
+            </div>
+
+    </div>
+</form>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addFileBtn">Загрузить файл</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+</div>
+</div>

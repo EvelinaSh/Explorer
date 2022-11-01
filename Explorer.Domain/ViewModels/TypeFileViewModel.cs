@@ -12,6 +12,15 @@ namespace Explorer.Domain.ViewModels
     {
         public int IdTypeFile { get; set; }
         public string NameType { get; set; }
-        public byte[] Icon { get; set; }
+        public byte[]? Icon { get; set; }
+    }
+
+    public class UploadedTypeViewModel
+    {
+        public IEnumerable<IFormFile> Icons { get; set; }
+
+        public string NameType { get; set; }
+
+
     }
 }

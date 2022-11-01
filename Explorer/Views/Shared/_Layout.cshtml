@@ -14,39 +14,21 @@
 </head>
 <body>
     
-    <div class="container-fluid">
-        <main role="main" class="pb-3">
+    <nav class="navbar p-3 border" style="background-color: while;">
+        <form class="container-fluid justify-content-start">
+            <button class="btn btn-outline-primary me-3" type="button" id="ButtonAddFolder">Создать папку</button>
+            <button class="btn btn-outline-primary me-3" type="button" id="ButtonAddFile">Загрузить файл</button>
+            <button class="btn btn-outline-primary me-3" type="button" id="ButtonAddType">Добавить расширение</button>
+            <button class="btn btn-outline-primary me-3" type="button" id="ButtonDeleteType">Удалить расширение</button>
+        </form>
+    </nav>
+
+    <div class="container-fluid" style="height:100vh; background-color: #F0F0F0;">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalLabel">Выберите файл для загрузки</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="form" name="form" action="/File/SaveFile" enctype="multipart/form-data" method="post">
-                    <div class="modal-body">
-                        <p>
-                            <label>Файл</label>
-                            <input id="files" name="files" type="file" size="1" multiple class="form-control" />
-                        </p>
-                        <p>
-                            <label>Описание файла</label>
-                            <input id="DescriptionFile" name="DescriptionFile" class="form-control" />
-                        </p>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveBtn">Загрузить файл</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
  
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

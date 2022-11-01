@@ -1,0 +1,23 @@
+﻿<div id="ContentModalAddFolder" style="display:none">
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="modalLabel">Создать папку</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<form id="form" name="form" action="/Folder/SaveFolder" method="post">
+    <div class="modal-body">
+            <p>
+                <label>Название папки</label>
+                <input id="NewNameFolder" name="NewNameFolder" class="form-control" />
+            </p>
+            <div class="alert alert-warning" role="alert" id="alertAddFolder">
+               Папка будет создана в корневом каталоге.
+               Для создания папки внутри папки используйте контекстное меню дерева.
+            </div>
+
+    </div>
+</form>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addFolderBtn">Создать папку</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+</div>
+</div>

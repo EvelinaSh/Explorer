@@ -45,13 +45,13 @@ namespace Explorer.Service.Implementations
                 {
                     foreach(var file in folder.Files)
                     {
-                        if ((file.IdFolder).Equals(0))
+                        if ((file.IdFolder).Equals(1))
                         {
                             baseResponse.Data.Add(
                            new JsTreeViewModel()
                            {
                                id = file.IdFile + "file",
-                               parent = file.IdFolder + "folder",
+                               parent = "#",
                                text = file.NameFile + "." + file.TypeFile.NameType,
                                children = false,
                                a_attr = new Attr { type = "file", title = file.DescriptionFile },
@@ -61,7 +61,7 @@ namespace Explorer.Service.Implementations
                          
                     }
                     
-                    if (folder.IdParentFolder.Equals(0))
+                    if (folder.IdParentFolder.Equals(1))
                     {
                         var childs = folders.Where(x => x.IdParentFolder == folder.IdFolder);
                         var child = childs.Count() != 0 ? true : false;

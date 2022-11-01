@@ -33,8 +33,12 @@ namespace Explorer.DAL.Repositories
 
         public async Task<List<TypeFile>> Select()
         {
-            return await _db.TypeFile.ToListAsync();
+            var res =  await _db.TypeFile.ToListAsync();
+            Console.WriteLine(res);
+            return res;
+
         }
+
 
         public async Task<bool> Delete(TypeFile entity)
         {

@@ -20,6 +20,8 @@ namespace Explorer.Domain.ViewModels
 
         public string? ContentFile { get; set; }
 
+        public string Icon { get; set; }
+
     }
 
 

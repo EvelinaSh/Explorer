@@ -18,17 +18,22 @@ using Microsoft.Net.Http.Headers;
 using System.Text;
 using Microsoft.JSInterop;
 using static System.Net.Mime.MediaTypeNames;
+using Explorer.Service.Implementations;
+using System.Xml.Linq;
 
 namespace Explorer.Controllers
 {
     public class FileController : Controller
     {
         private readonly IFileService _fileService;
+        private readonly ITypeFileService _typeFileService;
 
-        public FileController(IFileService fileService)
+        public FileController(IFileService fileService, ITypeFileService typeFileService)
         {
             _fileService = fileService;
+            _typeFileService = typeFileService;
         }
+
 
 
         // GET: FileController
@@ -66,6 +71,23 @@ namespace Explorer.Controllers
             return RedirectToAction("Error");
         }
 
+        public async Task<IActionResult> GetFileByName(string name)
+        {
+            var response = await _fileService.GetFileByName(name);
+            if (response.StatusCode == Domain.Enum.StatusCode.OK)
+            {
+                var items = response.Data;
+                var opts = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                    WriteIndented = true
+                };
+                return Json(items, opts);
+            }
+            return RedirectToAction("Error");
+        }
+
 
         public async Task<IActionResult> DeleteFile(int id)
         {
@@ -81,14 +103,35 @@ namespace Explorer.Controllers
         [HttpGet]
         public async Task<IActionResult> DownloadFile(int id)
         {
-            Console.WriteLine("UHHHHHHHH");
             var response = await _fileService.GetFile(id);
-
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
+                Console.WriteLine(response.Data.ContentFile);
                 var items = response.Data;
+                /*
+                FileInfo info = new FileInfo(items.NameFile + '.' + items.TypeFile.NameType);
+                if (!info.Exists)
+                {
+                    using (StreamWriter writer = info.CreateText())
+                    {
+                        writer.WriteLine(items.ContentFile);
+
+                    }
+                }
+
+                return File(info.OpenRead(), "text/plain");
+                */
+
+                var cd = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = items.NameFile + '.' + items.TypeFile.NameType,
+                    Inline = true,
+                };
+                Response.Headers.Add("Content-Disposition", cd.ToString());
+
                 return File(Encoding.UTF8.GetBytes(items.ContentFile), "text/plain",
                 items.NameFile + '.' + items.TypeFile.NameType, true);
+                
             }
             return RedirectToAction("Error");
             
@@ -98,35 +141,41 @@ namespace Explorer.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFile([FromForm] DownloadedFileViewModel files)
         {
-
+            FileViewModel mod = new FileViewModel();
             foreach (IFormFile file in files.Files)
             {
                 string[] attr = file.FileName.Split('.');
-                string[] types = { "cs", "css", "docx", "html", "js", "sql", "txt", "xls", "xlsx", "xml" };
-                var IdType = Array.IndexOf(types, attr[1]) + 1;
+                var responseType = await _typeFileService.GetTypeFileByName(attr[1]);
+               
                 var result = new StringBuilder();
                 string res = "";
                 using (var reader = new StreamReader(file.OpenReadStream()))
                 {
                         res = reader.ReadToEnd().ToString();
                 }
-                Console.WriteLine(res);
-                
-                FileViewModel mod = new FileViewModel()
+
+                mod = new FileViewModel()
                 {
                     NameFile = attr[0],
                     DescriptionFile = files.DescriptionFile,
-                    IdType = IdType,
+                    IdType = responseType.Data.IdType,
                     IdFolder = files.IdFolder,
                     ContentFile = res
 
                 };
-                var response = await _fileService.CreateFile(mod);
-                if (response.StatusCode == Domain.Enum.StatusCode.OK)
+                await _fileService.CreateFile(mod);
+                var responseFile = await _fileService.GetFileByName(attr[0]);
+                Console.WriteLine(responseFile.Data.TypeFile);
+                var icon = "data:image/png;base64," + Convert.ToBase64String(responseFile.Data.TypeFile.Icon);
+                FileViewModel objNameIcon = new FileViewModel()
                 {
-                    return RedirectToAction("GetFiles");
-                }
-               
+                    NameFile = file.FileName,
+                    Icon = icon,
+                    DescriptionFile = files.DescriptionFile,
+
+                };
+                return Json(objNameIcon);
+
             }
             return RedirectToAction("Error");
 

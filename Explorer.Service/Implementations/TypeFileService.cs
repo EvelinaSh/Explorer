@@ -185,6 +185,8 @@ namespace Explorer.Service.Implementations
             try
             {
                 var typeFiles = await _typeFileRepository.Select();
+                Console.WriteLine("SERV");
+                Console.WriteLine(typeFiles);
                 if (typeFiles.Count == 0)
                 {
                     baseResponse.Description = "Найдено 0 элементов";
@@ -199,9 +201,11 @@ namespace Explorer.Service.Implementations
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return new BaseResponse<IEnumerable<Domain.Entity.TypeFile>>()
                 {
-                    Description = $"[GetTypeFiles] : {ex.Message}",
+                    
+                Description = $"[GetTypeFiles] : {ex.Message}",
                     StatusCode = StatusCode.InternalServerError
                 };
             }

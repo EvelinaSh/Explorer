@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Explorer.Domain.Entity.TypeFile>;
+
+<div id="ContentModalDeleteType">
+<div class="modal-header">
+    <h1 class="modal-title fs-5" id="modalLabel">Выберите расширение для удаления</h1>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+    <form id="form" name="form" action="/TypeFile/DeleteTypeFile" enctype="multipart/form-data" method="post">
+    <div class="modal-body">
+
+        <select id="selectType" class="form-select" aria-label="select">
+            <option selected>Выберите расширение для удаления</option>
+                @foreach (Explorer.Domain.Entity.TypeFile type in Model)
+                {
+                    <option value="@type.IdType">@type.NameType</option>
+                }
+            
+        </select>
+
+    </div>
+</form>
+<div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id="deleteTypeBtn" onclick="deleteType()">Удалить расширение</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+</div>
+</div>
+
+<script>
+
+    function deleteType() {
+
+        let select = document.getElementById("selectType");
+        var value = select.value;
+
+        console.log(value)
+        $.ajax({
+            url: '/TypeFile/DeleteTypeFile',
+            type: 'POST',
+            data: { id: value },
+            success: function (result) {
+                console.log("Удалено")
+            }
+        });
+       
+
+    }
+</script>

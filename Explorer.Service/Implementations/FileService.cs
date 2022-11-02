@@ -157,6 +157,7 @@ namespace Explorer.Service.Implementations
             try
             {
                 var file = await _fileRepository.GetByName(name);
+
                 if (file == null)
                 {
                     baseResponse.Description = "File not found";

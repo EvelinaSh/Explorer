@@ -42,7 +42,7 @@ namespace Explorer.Controllers
         }
 
         public async Task<IActionResult> GetChildren(string id)
-        {
+        {   
             var response = await _jsTreeService.GetTree(id);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {

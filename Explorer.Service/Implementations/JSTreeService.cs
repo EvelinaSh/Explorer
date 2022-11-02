@@ -1,5 +1,6 @@
 ﻿using Explorer.DAL.Interfaces;
 using Explorer.DAL.Repositories;
+using Explorer.Domain.Entity;
 using Explorer.Domain.Enum;
 using Explorer.Domain.Response;
 using Explorer.Domain.ViewModels;
@@ -63,8 +64,9 @@ namespace Explorer.Service.Implementations
                     
                     if (folder.IdParentFolder.Equals(1))
                     {
-                        var childs = folders.Where(x => x.IdParentFolder == folder.IdFolder);
-                        var child = childs.Count() != 0 ? true : false;
+                        var childsFolder = folders.Where(x => x.IdParentFolder == folder.IdFolder);
+                        var childsFile = folder.Files.Where(x => x.IdFolder == folder.IdFolder);
+                        var child = (childsFolder.Count() + childsFile.Count()) != 0 ? true : false;
 
                         baseResponse.Data.Add(
                             new JsTreeViewModel()
@@ -99,6 +101,7 @@ namespace Explorer.Service.Implementations
 
         public async Task<IBaseResponse<List<JsTreeViewModel>>> GetTree(string id)
         {
+
             var baseResponse = new BaseResponse<List<JsTreeViewModel>>();
             try
             {
@@ -109,32 +112,40 @@ namespace Explorer.Service.Implementations
                     baseResponse.StatusCode = StatusCode.FolderNotFound;
                     return baseResponse;
                 }
+
                 baseResponse.Data = new List<JsTreeViewModel>() { };
                 foreach (var folder in folders)
                 {
 
-                    foreach (var file in folder.Files)
-                    {
-                        if ((file.IdFolder + "folder").Equals(id))
+                    if ((folder.IdFolder + "folder").Equals(id)){
+
+                        foreach (var file in folder.Files)
                         {
-                            baseResponse.Data.Add(
-                                new JsTreeViewModel()
-                                {
-                                    id = file.IdFile + "file",
-                                    parent = file.IdFolder + "folder",
-                                    text = file.NameFile + "." + file.TypeFile.NameType,
-                                    children = false,
-                                    a_attr = new Attr { type = "file", title = file.DescriptionFile },
-                                    icon = "data:image/png;base64," + Convert.ToBase64String(file.TypeFile.Icon)
-                                });
+
+                            if ((file.IdFolder + "folder").Equals(id))
+                            {
+
+                                baseResponse.Data.Add(
+                                    new JsTreeViewModel()
+                                    {
+                                        id = file.IdFile + "file",
+                                        parent = file.IdFolder + "folder",
+                                        text = file.NameFile + "." + file.TypeFile.NameType,
+                                        children = false,
+                                        a_attr = new Attr { type = "file", title = file.DescriptionFile },
+                                        icon = "data:image/png;base64," + Convert.ToBase64String(file.TypeFile.Icon)
+                                    });
+                            }
                         }
                     }
+                    
 
                     
                     if ((folder.IdParentFolder + "folder").Equals(id))
                     {
-                        var childs = folders.Where(x => x.IdParentFolder == folder.IdFolder);
-                        var child = childs.Count() != 0 ? true : false;
+                        var childsFolder = folders.Where(x => x.IdParentFolder == folder.IdFolder);
+                        var childsFile = folder.Files.Where(x => x.IdFolder == folder.IdFolder);
+                        var child = (childsFolder.Count() + childsFile.Count()) != 0 ? true : false;
 
                             baseResponse.Data.Add(
                                     new JsTreeViewModel()
@@ -146,8 +157,6 @@ namespace Explorer.Service.Implementations
                                         a_attr = new Attr { type = "folder", title = "Папка " + folder.NameFolder }
                                     });
                        
-
-          
                     }
 
                        

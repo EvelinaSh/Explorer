@@ -14,9 +14,9 @@ namespace Explorer.Domain.ViewModels
 
         public string DescriptionFile { get; set; }
 
-        public int IdType { get; set; }
+        public int? IdType { get; set; }
 
-        public int IdFolder { get; set; }
+        public int? IdFolder { get; set; }
 
         public string? ContentFile { get; set; }
 

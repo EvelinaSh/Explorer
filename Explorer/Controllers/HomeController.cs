@@ -32,10 +32,34 @@ namespace Explorer.Controllers
             
         }
 
+
+        public async Task<IActionResult> ModalAddFile()
+        {
+                return PartialView("ModalAddFile");
+
+        }
+
+
+        public async Task<IActionResult> ModalAddFolder()
+        {
+
+            return PartialView("ModalAddFolder");
+
+        }
+
+
+        public async Task<IActionResult> ModalAddType()
+        {
+
+            return PartialView("ModalAddType");
+
+        }
+
         public IActionResult Index()
         {
             return View();
         }
+
         public IActionResult Privacy()
         {
             return View();

@@ -71,9 +71,11 @@ namespace Explorer.Controllers
             return RedirectToAction("Error");
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetFileByName(string name)
         {
             var response = await _fileService.GetFileByName(name);
+
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
                 var items = response.Data;
@@ -129,7 +131,7 @@ namespace Explorer.Controllers
                 };
                 Response.Headers.Add("Content-Disposition", cd.ToString());
 
-                return File(Encoding.UTF8.GetBytes(items.ContentFile), "text/plain",
+                return File(Encoding.UTF8.GetBytes(items.ContentFile), "application/octet-stream",
                 items.NameFile + '.' + items.TypeFile.NameType, true);
                 
             }
@@ -146,35 +148,41 @@ namespace Explorer.Controllers
             {
                 string[] attr = file.FileName.Split('.');
                 var responseType = await _typeFileService.GetTypeFileByName(attr[1]);
-               
-                var result = new StringBuilder();
-                string res = "";
-                using (var reader = new StreamReader(file.OpenReadStream()))
+          
+                if (responseType.Data == null)
                 {
-                        res = reader.ReadToEnd().ToString();
+                    return RedirectToAction("Error");
                 }
+               
+                    var result = new StringBuilder();
+                    string res = "";
+                    using (var reader = new StreamReader(file.OpenReadStream()))
+                    {
+                        res = reader.ReadToEnd().ToString();
+                    }
 
-                mod = new FileViewModel()
-                {
-                    NameFile = attr[0],
-                    DescriptionFile = files.DescriptionFile,
-                    IdType = responseType.Data.IdType,
-                    IdFolder = files.IdFolder,
-                    ContentFile = res
+                    mod = new FileViewModel()
+                    {
+                        NameFile = attr[0],
+                        DescriptionFile = files.DescriptionFile,
+                        IdType = responseType.Data.IdType,
+                        IdFolder = files.IdFolder,
+                        ContentFile = res
 
-                };
-                await _fileService.CreateFile(mod);
-                var responseFile = await _fileService.GetFileByName(attr[0]);
-                Console.WriteLine(responseFile.Data.TypeFile);
-                var icon = "data:image/png;base64," + Convert.ToBase64String(responseFile.Data.TypeFile.Icon);
-                FileViewModel objNameIcon = new FileViewModel()
-                {
-                    NameFile = file.FileName,
-                    Icon = icon,
-                    DescriptionFile = files.DescriptionFile,
+                    };
+                    await _fileService.CreateFile(mod);
+                    var responseFile = await _fileService.GetFileByName(attr[0]);
+                    Console.WriteLine(responseFile.Data.TypeFile);
+                    var icon = "data:image/png;base64," + Convert.ToBase64String(responseFile.Data.TypeFile.Icon);
+                    FileViewModel objNameIcon = new FileViewModel()
+                    {
+                        NameFile = file.FileName,
+                        Icon = icon,
+                        DescriptionFile = files.DescriptionFile,
 
-                };
-                return Json(objNameIcon);
+                    };
+                    return Json(objNameIcon);
+                
 
             }
             return RedirectToAction("Error");

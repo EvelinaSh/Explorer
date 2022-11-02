@@ -7,6 +7,10 @@ using Explorer.Domain.ViewModels;
 using Explorer.Service.Implementations;
 using System.Text;
 using System.IO;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using System.Text.Unicode;
 
 namespace Explorer.Controllers
 {
@@ -25,9 +29,17 @@ namespace Explorer.Controllers
         public async Task<IActionResult> GetTypesFiles()
         {
             var response = await _typeFileService.GetTypesFiles();
+                
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                return View(response.Data.ToList());
+                var items = response.Data.ToList();
+                var opts = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                    WriteIndented = true
+                };
+                return Json(items, opts);
             }
             return RedirectToAction("Error");
         }
@@ -37,7 +49,7 @@ namespace Explorer.Controllers
         {
             var response = await _typeFileService.GetTypeFile(id);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
-            {
+            {   
                 return View(response.Data);
             }
             return RedirectToAction("Error");
@@ -46,9 +58,11 @@ namespace Explorer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTypeFileByName(string name)
         {
+            Console.WriteLine(name);
             var response = await _typeFileService.GetTypeFileByName(name);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
+                Console.WriteLine(response.Data);
                 return View(response.Data);
             }
             return RedirectToAction("Error");

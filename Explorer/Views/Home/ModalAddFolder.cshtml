@@ -1,4 +1,4 @@
-﻿<div id="ContentModalAddFolder" style="display:none">
+﻿<div id="ContentModalAddFolder">
 <div class="modal-header">
     <h1 class="modal-title fs-5" id="modalLabel">Создать папку</h1>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -17,7 +17,105 @@
     </div>
 </form>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addFolderBtn">Создать папку</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addFolderBtn" onclick="AddFolder()">Создать папку</button>
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
 </div>
 </div>
+
+
+<script>
+
+    function AddFolder() {
+        let IdParent = $('#ContentModalAddFolder').data("IdParent");
+        let NameFolder = $('input#NewNameFolder').val();
+        console.log(IdParent)
+        if (IdParent == 0) {
+         
+      $.ajax({
+                url: "/TreeView/GetRoot",
+                success: function (result) {
+                    console.log(result);
+                    let fl = false;
+                    result.forEach(function (el) {
+                        if (el.text == NameFolder) fl = true;
+                    })
+                    if (fl == true) {
+                        alert("Папка с таким именем уже есть, введите другое имя");
+                        return;
+                    }
+                    else {
+                        let model = {
+                            IdFolder: 0,
+                            NameFolder: NameFolder,
+                            IdParentFolder: 1
+                        }
+                        $.ajax({
+                            url: "/Folder/SaveFolder",
+                            type: 'POST',
+                            data: model,
+                            success: function (result) {
+
+                                $('#treeview').jstree(true).refresh(true);
+                                result.forEach(e => {
+                                    if (e.NameFolder == NameFolder) $('#treeview').jstree(true).activate_node(e.IdFolder + 'folder');
+                                })
+                            }
+                        });
+                    }
+
+                }
+
+
+        });
+    }
+    else {
+            console.log(IdParent)
+            $.ajax({
+                url: "/TreeView/GetChildren/" + IdParent+"folder",
+                success: function (result) {
+                    console.log(result);
+                    let fl = false;
+                    result.forEach(function (el) {
+                        console.log(el);
+                        if (el.text == NameFolder) fl = true;
+                    })
+                    if (fl == true) {
+                        alert("Папка с таким именем уже есть, введите другое имя");
+                        return;
+                    }
+                    else {
+                        let model = {
+                            IdFolder: 0,
+                            NameFolder: NameFolder,
+                            IdParentFolder: IdParent
+                        }
+                        $.ajax({
+                            url: "/Folder/SaveFolder",
+                            type: 'POST',
+                            data: model,
+                            success: function (result) {
+                                
+                                $('#treeview').jstree(true).refresh(true);
+                                result.forEach(e => {
+                                    if (e.NameFolder == NameFolder) $('#treeview').jstree(true).activate_node(e.IdFolder + 'folder');
+                                })
+                                
+                            }
+                        });
+                    }
+
+                }
+
+
+        });
+    }
+
+
+
+
+
+            
+
+    }
+
+</script>

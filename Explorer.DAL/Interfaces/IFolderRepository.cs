@@ -10,5 +10,7 @@ namespace Explorer.DAL.Interfaces
     public interface IFolderRepository : IBaseRepository<Folder>
     {
         Task<Folder> GetByName(string name);
+
+        Task<List<Folder>> GetByParent(int IdParent);
     }
 }

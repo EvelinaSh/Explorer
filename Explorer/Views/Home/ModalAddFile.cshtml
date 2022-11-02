@@ -1,4 +1,6 @@
-﻿<div id="ContentModalAddFile" style="display:none">
+﻿
+
+<div id="ContentModalAddFile">
 <div class="modal-header">
     <h1 class="modal-title fs-5" id="modalLabel">Выберите файл для загрузки</h1>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -21,7 +23,73 @@
     </div>
 </form>
 <div class="modal-footer">
-    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addFileBtn">Загрузить файл</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="addFileBtn" onclick="addFile()">Загрузить файл</button>
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
 </div>
 </div>
+
+<script>
+
+    function addFile() {
+
+        var input = document.getElementById('files');
+        var files = input.files;
+        var formData = new FormData();
+
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+
+        let DescriptionFile = $('input#DescriptionFile').val();
+
+        formData.append("DescriptionFile", DescriptionFile);
+        let IdFolder = $('#ContentModalAddFile').data("IdFolder");
+
+        if (IdFolder == 0) {
+
+            let IdFolder = 1;
+         
+            formData.append("IdFolder", IdFolder);
+
+            $.ajax({
+                url: '/File/CreateFile',
+                type: 'POST',
+                data: formData,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                success: function (result) {
+                    console.log(result)
+ 
+
+                    $('#treeview').jstree(true).refresh(false, true);
+                },
+                error: function (response) {
+                    alert("Расширение загружаемого файла не найдено или данный файл уже загружен");
+                }
+            });
+        }
+        else{
+
+            formData.append("IdFolder", IdFolder);
+
+                $.ajax({
+                    url: '/File/CreateFile',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    success: function (result) {
+                    console.log(result)
+                    $('#treeview').jstree(true).refresh(true);
+                    },
+                    error: function (response) {
+                    alert("Расширение загружаемого файла не найдено или данный файл уже загружен");
+                    }
+                });
+
+        }
+        
+
+        }
+
+</script>

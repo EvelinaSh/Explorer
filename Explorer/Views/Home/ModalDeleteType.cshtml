@@ -17,6 +17,10 @@
             
         </select>
 
+            <div class="alert alert-warning mt-3" role="alert">
+                При удалении расширения файлы с указанным расширением будут удалены.
+            </div>
+
     </div>
 </form>
 <div class="modal-footer">
@@ -31,16 +35,50 @@
 
         let select = document.getElementById("selectType");
         var value = select.value;
+        let Del = function () {
+            $.ajax({
+                url: '/TypeFile/DeleteTypeFile',
+                type: 'POST',
+                data: { id: value },
+                success: function (result) {
+                    console.log("Удалено")
 
-        console.log(value)
-        $.ajax({
-            url: '/TypeFile/DeleteTypeFile',
-            type: 'POST',
-            data: { id: value },
+                }
+            });
+        }
+
+            $.ajax({
+            url: "/File/GetFiles",
+            type: 'GET',
             success: function (result) {
-                console.log("Удалено")
+                result.forEach(e => {
+                    console.log(e)
+                    if (e.IdType == value){
+                        console.log(e.IdType)
+                        $.ajax({
+                            url: "/File/DeleteFile",
+                            type: 'POST',
+                            data: { id: e.IdFile },
+                            success: function (result) {
+                               
+                            }
+                        });
+                    }
+                    console.log("Успех")
+                    console.log(value)
+                    
+                })
+                setTimeout(Del, 1000);
+
+                $('#treeview').jstree(true).refresh(true);
             }
+            
         });
+
+       
+
+           
+
        
 
     }

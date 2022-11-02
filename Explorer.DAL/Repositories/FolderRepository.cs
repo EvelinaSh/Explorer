@@ -34,6 +34,10 @@ namespace Explorer.DAL.Repositories
             return await _db.Folder.Include(e => e.Files).ThenInclude(f => f.TypeFile).FirstOrDefaultAsync(x => x.IdFolder == id);
         }
 
+        public Task<List<Folder>> GetByParent(int id)
+        {
+            return (Task<List<Folder>>)_db.Folder.Include(e => e.Files).ThenInclude(f => f.TypeFile).Where(x => x.IdParentFolder == id);
+        }
 
         public async Task<List<Folder>> Select()
         {

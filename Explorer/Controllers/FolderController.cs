@@ -59,12 +59,38 @@ namespace Explorer.Controllers
         }
 
 
-        public async Task<IActionResult> DeleteFolder(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetFolderByName(string name)
         {
-            var response = await _folderService.DeleteFolder(id);
+            var response = await _folderService.GetFolderByName(name);
+            Console.WriteLine(response.StatusCode);
+            Console.WriteLine(name);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
-                return RedirectToAction("GetFolders");
+                var items = response.Data;
+                Console.WriteLine("GETFOLDER");
+                Console.WriteLine(items);
+                var opts = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                    WriteIndented = true
+                };
+                return Json(items, opts);
+            }
+            return RedirectToAction("Error");
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteFolder(int id)
+        {
+            Console.WriteLine(id);
+            var response = await _folderService.DeleteFolder(id);
+            if (response.Data == true)
+            {
+                return Json(response);
             }
             return RedirectToAction("Error");
         }

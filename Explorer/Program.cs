@@ -25,6 +25,7 @@ builder.Services.AddScoped<ITypeFileRepository, TypeFileRepository>();
 builder.Services.AddScoped<ITypeFileService, TypeFileService>();
 builder.Services.AddScoped<IJSTreeService, JSTreeService>();
 
+
 //builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
 var app = builder.Build();

@@ -63,13 +63,9 @@ namespace Explorer.Controllers
         public async Task<IActionResult> GetFolderByName(string name)
         {
             var response = await _folderService.GetFolderByName(name);
-            Console.WriteLine(response.StatusCode);
-            Console.WriteLine(name);
             if (response.StatusCode == Domain.Enum.StatusCode.OK)
             {
                 var items = response.Data;
-                Console.WriteLine("GETFOLDER");
-                Console.WriteLine(items);
                 var opts = new JsonSerializerOptions
                 {
                     ReferenceHandler = ReferenceHandler.IgnoreCycles,
@@ -86,7 +82,6 @@ namespace Explorer.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteFolder(int id)
         {
-            Console.WriteLine(id);
             var response = await _folderService.DeleteFolder(id);
             if (response.Data == true)
             {

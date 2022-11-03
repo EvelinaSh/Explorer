@@ -103,10 +103,13 @@ namespace Explorer.Service.Implementations
    
               folder.NameFolder = model.NameFolder;
               folder.IdParentFolder = model.IdParentFolder;
-                
-           
 
-              await _folderRepository.Update(folder);
+                Console.WriteLine("SERVER");
+                Console.WriteLine(folder.IdFolder);
+                Console.WriteLine(folder.NameFolder);
+
+
+                await _folderRepository.Update(folder);
 
 
               return baseResponse;

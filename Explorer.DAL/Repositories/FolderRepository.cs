@@ -21,9 +21,6 @@ namespace Explorer.DAL.Repositories
 
         public async Task<bool> Create(Folder entity)
         {
-            Console.WriteLine("Rep");
-            Console.WriteLine(entity.NameFolder);
-            Console.WriteLine(entity.IdParentFolder);
             await _db.Folder.AddAsync(entity); 
             await _db.SaveChangesAsync(); 
             return true;

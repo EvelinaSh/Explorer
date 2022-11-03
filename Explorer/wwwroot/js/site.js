@@ -59,30 +59,9 @@
                   "separator_before": false,
                   "separator_after": false,
                   "label": "Переименовать",
-                             "action": function (obj) {
-                                     
+                             "action": function (obj) { 
                                  tree.edit($node);
-                                 let idParent = parseInt($node.parent);
-                                 let idFolder = parseInt($node.id);
-                                 let text = $node.text;
-                                 console.log(idParent)
-                                 console.log(idFolder)
-                                 console.log(text)
-                                 let model = {
-                                     IdFolder: idFolder,
-                                     NameFolder: text,
-                                     IdParentFolder: idParent
-                                 }
-
-                                 $.ajax({
-                                     url: "/Folder/SaveFolder",
-                                     type: 'POST',
-                                     data: model,
-                                     success: function (result) {
-                                         console.log("Успех")
-                                     }
-                                 });
-                                
+  
                              }
                   },
                   "Remove": {
@@ -154,23 +133,7 @@
                 "action": function (obj) {
                    
                     tree.edit($node);
-                    let IdFile = parseInt($node.id);
-                    let attr = $node.text.split('.');
-                    let model = {
-                        IdFile: IdFile,
-                        NameFile: attr[0]
-                    }
-                    console.log(IdFile)
-                    console.log(attr[0])
-                    $.ajax({
-                        url: "/File/UpdateFile",
-                        type: 'POST',
-                        data: model,
-                        success: function (result) {
-                            console.log("Успех")
-                        }
-                    });
-                    
+                                        
                     }
                 },
                 "Remove": {
@@ -238,7 +201,52 @@
                 }
         }
           
-    });
+    })
+        .bind('rename_node.jstree', function (e, data) {
+            if (data.node.a_attr.type == "folder") {
+                let idParent = parseInt(data.node.parent);
+                let idFolder = parseInt(data.node.id);
+
+                console.log(idParent)
+                console.log(idFolder)
+
+                console.log(data.text);
+                let model = {
+                    IdFolder: idFolder,
+                    NameFolder: data.text,
+                    IdParentFolder: idParent
+                }
+
+                $.ajax({
+                    url: "/Folder/SaveFolder",
+                    type: 'POST',
+                    data: model,
+                    success: function (result) {
+                        console.log("Успех")
+                    }
+                });
+            }
+            else {
+                let IdFile = parseInt(data.node.id);
+                console.log(data.text);
+                let attr = data.text.split('.');
+                let model = {
+                    IdFile: IdFile,
+                    NameFile: attr[0]
+                }
+                console.log(IdFile)
+                console.log(attr[0])
+                $.ajax({
+                    url: "/File/UpdateFile",
+                    type: 'POST',
+                    data: model,
+                    success: function (result) {
+                        console.log("Успех")
+                    }
+                });
+            }
+       
+});
 
 
     $('#treeview').on('dblclick', '.jstree-anchor', function (e, data) {

@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="dist/themes/proton/style.min.css" />
 </head>
-<body>
-    
-    <nav class="navbar p-3 border" style="background-color: while;">
+<body style="height:100%;">
+
+    <nav class="navbar sticky-top p-3 border" style="background-color: white; ">
         <form class="container-fluid justify-content-start">
             <button class="btn btn-outline-primary me-3" type="button" id="ButtonAddFolder">Создать папку</button>
             <button class="btn btn-outline-primary me-3" type="button" id="ButtonAddFile">Загрузить файл</button>
@@ -23,7 +23,7 @@
         </form>
     </nav>
 
-    <div class="container-fluid" style="height:100vh; background-color: #F0F0F0;">
+    <div class="container-fluid" style="height:100%;">
         <main role="main">
             @RenderBody()
         </main>

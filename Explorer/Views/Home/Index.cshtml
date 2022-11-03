@@ -2,19 +2,22 @@
     ViewData["Title"] = "Home Page";
 }
 
+
 <div class="row gx-2">
-    <div class="col-3 h-100" >
-        <div id='treeview' class="p-3 mt-2 border" style="background-color:white; height:100vh;"></div>
+    <div class="col-3" style=" position: relative;">
+        <div id='treeview' class="p-3 border" style="background-color:white; height:calc(100vh - 100px); width: 24%; position: fixed;"></div>
       
         </div>
 
-    <div class="col-9 h-100" >
-        <div class="p-3 mt-2 border" style="background-color:white; height:100vh;">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <div class="col-9 " style="background-color:white; ">
+        <div class="row gx-2" style=" position: relative; width: 70%;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="position: fixed; z-index: 101; background-color:white;">
 
         </ul>
-        <div class="tab-content" id="myTabContent">
         </div>
+
+        <div class="tab-content mt-4 p-3" id="myTabContent" style=" height:100%; background-color:white; margin-top:20px; position: sticky; font-family: monospace">
+    
         </div>
         </div>
 
